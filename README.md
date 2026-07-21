@@ -1,5 +1,12 @@
 # adr-advisor
 
+### ▶ Live demo: **[adr-advisor.kareemghazal.com](https://adr-advisor.kareemghazal.com)**
+
+Enter a decision and the options you're weighing (or "Load example"), and get the trade-off table,
+per-option analysis and a recommendation. (First run ~10–20s.)
+
+![adr-advisor: a trade-off table across the axes, per-option pros/cons, and a recommended option](docs/images/screenshot.png)
+
 An **architecture-decision trade-off advisor**. Give it a decision (with constraints) and the
 candidate options you're weighing — it analyses each option across **scalability, reliability,
 cost, operability and maintainability**, lays out the trade-offs, and recommends **one of your
