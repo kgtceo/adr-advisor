@@ -1,0 +1,23 @@
+[
+  {
+    "name": "queue-small-team-ordering",
+    "decision": "Queue between order service and email sender. Constraints: per-user ordering matters, at-least-once is fine, ~1,000 msg/s, small team with limited ops capacity, already all-in on AWS serverless.",
+    "options": ["SQS FIFO", "Kinesis", "EventBridge", "Kafka (MSK)"],
+    "must_not_recommend": ["Kafka (MSK)"],
+    "note": "Kafka/MSK is a poor fit for a small team with limited ops capacity — high operational burden."
+  },
+  {
+    "name": "datastore-cost-constrained",
+    "decision": "Primary datastore for a simple key-value session store. Hard constraint: keep monthly cost minimal, tiny team, spiky low traffic, serverless-first. Simple access patterns (get/put by key).",
+    "options": ["DynamoDB on-demand", "Self-managed PostgreSQL on EC2", "Aurora provisioned"],
+    "must_not_recommend": ["Self-managed PostgreSQL on EC2", "Aurora provisioned"],
+    "note": "For minimal cost + tiny team + spiky low traffic + serverless, DynamoDB on-demand fits; the others carry ops burden / idle cost."
+  },
+  {
+    "name": "sync-vs-async-fanout",
+    "decision": "When an order is placed we must notify up to millions of followers. Constraint: the user's request must return fast; delivery can be eventually consistent.",
+    "options": ["Synchronous fan-out in the request handler", "Publish one event to a queue, workers fan out asynchronously"],
+    "must_not_recommend": ["Synchronous fan-out in the request handler"],
+    "note": "Synchronous fan-out in the request path is clearly wrong when the request must return fast."
+  }
+]
