@@ -47,6 +47,8 @@ python evals/run_evals.py --no-judge
   Kafka for a tiny team, synchronous fan-out when the request must return fast), it doesn't pick it.
 - **Judge** — opus scores analysis quality, soundness and pragmatism.
 
+**Latest run (claude-sonnet-4-6, opus judge):** all gates pass — 3/3 recommendations are one of the supplied options (SQS FIFO; DynamoDB on-demand; a queue-based async fan-out), never an invented one.
+
 ## Tests
 
 ```bash
@@ -59,7 +61,24 @@ invalid — and that loose/case-variant names are normalised to your exact optio
 ## Web
 
 `web/` — a Next.js UI: enter a decision + options, get the trade-off table, per-option analysis
-and a recommendation. See [DEPLOY.md](./DEPLOY.md).
+and a recommendation.
+
+Run it locally in two terminals:
+
+```bash
+# terminal 1 — the API
+pip install -e .
+cp .env.example .env                  # add ANTHROPIC_API_KEY
+python -m uvicorn adr_advisor.api:app --port 8000
+
+# terminal 2 — the UI
+cd web
+npm install
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+npm run dev                           # open http://localhost:3000
+```
+
+See [DEPLOY.md](./DEPLOY.md).
 
 ## License
 
